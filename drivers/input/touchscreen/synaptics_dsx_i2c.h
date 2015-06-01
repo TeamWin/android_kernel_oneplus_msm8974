@@ -87,6 +87,7 @@ extern void synaptics_rmi4_sync_lcd_suspend(void);
 extern void synaptics_rmi4_sync_lcd_resume(void);
 #endif
 
+//#define DO_STARTUP_FW_UPDATE
 
 /*
  * struct synaptics_rmi4_fn_desc - function descriptor fields in PDT

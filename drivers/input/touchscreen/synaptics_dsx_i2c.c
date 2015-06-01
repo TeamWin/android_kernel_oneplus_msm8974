@@ -4541,6 +4541,7 @@ static int __devinit synaptics_rmi4_probe(struct i2c_client *client,
 	queue_delayed_work(exp_data.workqueue,
 			&exp_data.work,
 			msecs_to_jiffies(EXP_FN_WORK_DELAY_MS));
+#ifdef DO_STARTUP_FW_UPDATE
 	rmi4_fw_module_init(true);
 	while(1) {
 		msleep(50);
@@ -4549,6 +4550,7 @@ static int __devinit synaptics_rmi4_probe(struct i2c_client *client,
 			break;
 		}
 	}
+#endif
 
 	for (attr_count = 0; attr_count < ARRAY_SIZE(attrs); attr_count++) {
 		retval = sysfs_create_file(&rmi4_data->input_dev->dev.kobj,

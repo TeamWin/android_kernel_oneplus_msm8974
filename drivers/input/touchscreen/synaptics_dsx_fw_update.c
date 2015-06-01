@@ -42,7 +42,6 @@
 #include <linux/pcb_version.h>
 
 #define FW_IMAGE_NAME "synaptics/startup_fw_update.img"
-#define DO_STARTUP_FW_UPDATE
 #define STARTUP_FW_UPDATE_DELAY_MS 200 /* ms */
 #define FORCE_UPDATE false
 #define DO_LOCKDOWN false
@@ -1562,6 +1561,7 @@ static unsigned char* fwu_rmi4_get_firmware_data(void) {
 	
 }
 
+#ifdef DO_STARTUP_FW_UPDATE
 static void fwu_startup_fw_update_work(struct work_struct *work)
 {
 	unsigned char* firmwaredata = 0;
@@ -1582,6 +1582,7 @@ static void fwu_startup_fw_update_work(struct work_struct *work)
 
 	return;
 }
+#endif
 
 static ssize_t fwu_sysfs_show_image(struct file *data_file,
 		struct kobject *kobj, struct bin_attribute *attributes,
@@ -2008,6 +2009,7 @@ static ssize_t synaptics_proc_write( struct file *filp, const char __user *buff,
 		printk("[syna]update return value=0x%x\n",ret);
 	} else if(temp[0] == '2' && temp[1] == '2') {
 	    //add interface for load tp firmware from file
+#ifdef DO_STARTUP_FW_UPDATE
 		fwu->force_update = 1;
 		if(!fwu->image_name[0]) {
 			strcpy(fwu->image_name,"/sdcard");
@@ -2015,6 +2017,7 @@ static ssize_t synaptics_proc_write( struct file *filp, const char __user *buff,
 					&fwu->fwu_work,
 					msecs_to_jiffies(5));
 		}
+#endif
 	} else if(temp[0]=='3' && temp[1]=='3') {
         //test codes
 		sscanf(temp+3, "%x %x %x", val,val+1,val+2);
